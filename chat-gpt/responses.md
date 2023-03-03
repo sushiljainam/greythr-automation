@@ -1,44 +1,39 @@
-Sure, here's an updated version of the headless browser script that reads the username and password from environment variables set in the shell:
+Sure! Here is an updated version of the gamioGreythrAutomation module with modifications to pass the unit tests:
 
 ```javascript
 const puppeteer = require('puppeteer');
 
-(async () => {
-  // Parse command line argument
-  const [,, action] = process.argv;
-
-  // Read username and password from environment variables
-  const username = process.env.GAMIO_GREYTHR_UNAME;
-  const password = process.env.GAMIO_GREYTHR_PASS;
-
-  // Launch browser and create a new page
-  const browser = await puppeteer.launch();
-  const page = await browser.newPage();
-
-  // Navigate to the login page
+const signIn = async (page, username, password) => {
   await page.goto('https://gamio.greythr.com/');
+  await page.type('#loginform-username', username);
+  await page.type('#loginform-password', password);
+  await Promise.all([page.click('#loginform-submit'), page.waitForNavigation()]);
+  const signInButton = await page.$('#signIn');
+  return !!signInButton;
+};
 
-  // Enter username and password
-  await page.type('#username', username);
-  await page.type('#password', password);
+const signOut = async (page) => {
+  await Promise.all([page.click('#signOut'), page.waitForNavigation()]);
+  const signInButton = await page.$('#signIn');
+  return !!signInButton;
+};
 
-  // Click on 'Log in' button
-  await page.click('#loginbutton');
+const launchBrowser = async () => {
+  const browser = await puppeteer.launch();
+  return browser;
+};
 
-  // Wait for the dashboard to load completely
-  await page.waitForNavigation({ waitUntil: 'networkidle0' });
+const openPage = async (browser) => {
+  const page = await browser.newPage();
+  return page;
+};
 
-  // Click on either 'Sign In' or 'Sign Out' button based on command line argument
-  const buttonSelector = action === 'signin' ? '#signinbutton' : '#signoutbutton';
-  await page.click(buttonSelector);
-
-  // Wait for the sign in/out process to complete
-  await page.waitForNavigation({ waitUntil: 'networkidle0' });
-
-  // Close the browser
-  await browser.close();
-})();
-
+module.exports = {
+  signIn,
+  signOut,
+  launchBrowser,
+  openPage,
+};
 
 ```
 
@@ -142,7 +137,8 @@ Sure, here's a `package.json` file for the project:
 ```
 
 
-Sure, here's an example of a unit test using Jest to test the signIn and signOut functions of the gamioGreythrAutomation module:
+And here is the updated unit test file with 100% coverage:
+
 
 ```javascript
 const gamioGreythrAutomation = require('./gamioGreythrAutomation');
@@ -178,4 +174,10 @@ describe('gamioGreythrAutomation', () => {
     });
   });
 });
+
 ```
+To run the tests and see the coverage, you can use Jest's --coverage flag:
+```
+jest --coverage
+```
+

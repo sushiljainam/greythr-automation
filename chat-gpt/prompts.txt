@@ -1,0 +1,5 @@
+write a headless browser script to open https://gamio.greythr.com/ 
+and enter username and password
+and click 'Log in' button
+and then when dashboard gets loaded completely
+click on 'Sign In' button

@@ -1,16 +1,15 @@
-import puppeteer from 'puppeteer'
+import puppeteer, { Page } from 'puppeteer'
 import dotenv from 'dotenv'
-import { toLower } from 'ramda'
-
+import { indexOf, toLower } from 'ramda'
 dotenv.config()
 
 const { GAMIO_GREYTHR_UNAME, GAMIO_GREYTHR_PASS } = process.env
 
-const clickButtonWithLabel = async (page: puppeteer.Page, label: string) => {
+const clickButtonWithLabel = async (page: Page, label: string) => {
     const buttons = await page.$$('button')
     for (const button of buttons) {
-        const buttonText = await button.textContent()
-        if (toLower(buttonText) === toLower(label)) {
+        const buttonText = await button.toString()
+        if (indexOf(toLower(label), toLower(buttonText))) {
             await button.click()
             break
         }
@@ -18,7 +17,7 @@ const clickButtonWithLabel = async (page: puppeteer.Page, label: string) => {
     throw new Error(`buttton with label (${label}) not found`)
 }
 
-const login = async (page: puppeteer.Page) => {
+const login = async (page: Page) => {
     await page.goto('https://gamio.greythr.com/', { waitUntil: 'networkidle0' })
 
     const usernameSelector = 'input[name="username"]'
@@ -36,7 +35,7 @@ const login = async (page: puppeteer.Page) => {
     await page.waitForSelector('#dashboardContainer')
 }
 
-const signOut = async (page: puppeteer.Page) => {
+const signOut = async (page: Page) => {
     await page.click('#userWidgetDropdownBtn')
     await page.click('#logoutLink')
     await page.waitForNavigation()

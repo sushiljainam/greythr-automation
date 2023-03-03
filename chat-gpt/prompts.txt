@@ -55,3 +55,5 @@ can we use ts-node instead of tsc and node?
 update the readme.md file accordingly for ts-node
 I need this in markdown syntax inside code block
 
+can you share final contents of all 10 files as listed in file structure
+

@@ -29,3 +29,29 @@ what will be the file structure for this project?
 
 what will be sample .env
 
+convert all code files and readme files as this project will work in typescript
+also the UT
+
+what's new file structure?
+
+```
+├── node_modules/
+├── src/
+│   ├── gamio-greythr.ts
+│   └── index.ts
+├── test/
+│   └── gamio-greythr.spec.ts
+├── .dockerignore
+├── .env.sample
+├── .gitignore
+├── Dockerfile
+├── package.json
+├── README.md
+└── tsconfig.json
+```
+
+can we use ts-node instead of tsc and node?
+
+update the readme.md file accordingly for ts-node
+I need this in markdown syntax inside code block
+

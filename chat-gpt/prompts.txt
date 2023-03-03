@@ -57,3 +57,8 @@ I need this in markdown syntax inside code block
 
 can you share final contents of all 10 files as listed in file structure
 
+write a puppeteer ts script to open https://gamio.greythr.com/ in chrome window
+and enter username and password
+and click 'Log in' button
+and then when dashboard gets loaded completely
+click on 'Sign In' button

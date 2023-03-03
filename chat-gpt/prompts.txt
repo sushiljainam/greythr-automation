@@ -8,3 +8,7 @@ add a condition into this script based on cmd line input
 input can be 'signin' or 'signout'
 modify the 'click on sign in button' step according to this input
 
+read username and passowrd from shell env
+username from GAMIO_GREYTHR_UNAME
+passowrd from GAMIO_GREYTHR_PASS
+

@@ -1,4 +1,4 @@
-Sure, here's an updated version of the headless browser script that takes a command line argument to determine whether to click the 'Sign In' or 'Sign Out' button:
+Sure, here's an updated version of the headless browser script that reads the username and password from environment variables set in the shell:
 
 ```javascript
 const puppeteer = require('puppeteer');
@@ -6,6 +6,10 @@ const puppeteer = require('puppeteer');
 (async () => {
   // Parse command line argument
   const [,, action] = process.argv;
+
+  // Read username and password from environment variables
+  const username = process.env.GAMIO_GREYTHR_UNAME;
+  const password = process.env.GAMIO_GREYTHR_PASS;
 
   // Launch browser and create a new page
   const browser = await puppeteer.launch();
@@ -15,8 +19,8 @@ const puppeteer = require('puppeteer');
   await page.goto('https://gamio.greythr.com/');
 
   // Enter username and password
-  await page.type('#username', 'your_username');
-  await page.type('#password', 'your_password');
+  await page.type('#username', username);
+  await page.type('#password', password);
 
   // Click on 'Log in' button
   await page.click('#loginbutton');
@@ -37,6 +41,15 @@ const puppeteer = require('puppeteer');
 
 
 ```
+
+To set the GAMIO_GREYTHR_UNAME and GAMIO_GREYTHR_PASS environment variables in the shell, you can use the following commands:
+
+```
+export GAMIO_GREYTHR_UNAME=your_username
+export GAMIO_GREYTHR_PASS=your_password
+```
+
+Note that you'll need to replace 'your_username' and 'your_password' with your actual login credentials.
 
 
 To run this modified script with the 'signin' command line argument, you can use the following command:

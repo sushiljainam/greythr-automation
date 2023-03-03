@@ -1,6 +1,6 @@
-import puppeteer, { Page } from 'puppeteer'
+import puppeteer, { ElementHandle, Page } from 'puppeteer'
 import dotenv from 'dotenv'
-import { indexOf, toLower } from 'ramda'
+import { includes, indexOf, toLower } from 'ramda'
 dotenv.config()
 
 const { GAMIO_GREYTHR_UNAME, GAMIO_GREYTHR_PASS } = process.env
@@ -59,17 +59,32 @@ const signOut = async (page: Page) => {
     console.log('await page.waitForNavigation()')
 }
 
+const exploreChildren = async function (page: Page, el: ElementHandle<Element>) {
+    const chs = await el.$$('pierce/button')
+    for (const ch of chs) {
+        console.log(await page.evaluate(elm => elm.tagName, el), '>', await page.evaluate(elm => elm.tagName, ch))
+        console.log(await page.evaluate(elm => elm.tagName, el), '>', await page.evaluate(elm => elm.textContent, ch))
+        if (includes('button', toLower(await page.evaluate(elm => elm.tagName, ch)))) {
+            await exploreChildren(page, ch)
+        }
+        // console.log(await el.getProperty('tagName'), '>', await ch.getProperty('tagName'))
+    }
+}
+
 const signIn = async (page: Page) => {
     const pe = await page.$('gt-attendance-info')
     console.log('await page.click(\'gt-attendance-info\')', pe)
-    const bts = await pe?.$$('gt-button')
-    console.log('await page.click(\'gt-attendance-info * button\')', bts?.length)
-    if (bts && bts.length > 0) {
-        const tc = await bts[0].getProperty('textContent')
-        console.log(tc)
-        const text = await (tc).jsonValue()
-        console.log('button text', text)
-        await bts?.[0].click()
+    if (pe) {
+        await exploreChildren(page, pe)
+        const bts = await pe.$$('gt-button')
+        console.log('await page.click(\'gt-attendance-info * button\')', bts?.length)
+        if (bts && bts.length > 0) {
+            const tc = await bts[0].getProperty('textContent')
+            console.log(tc)
+            const text = await (tc).jsonValue()
+            console.log('button text', text)
+            await bts?.[0].click()
+        }
     }
     // await page.click('#logoutLink')
     // console.log('await page.click(\'#logoutLink\')')

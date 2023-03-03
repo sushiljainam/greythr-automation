@@ -1,0 +1,11 @@
+# Node.js
+node_modules/
+
+# Output
+coverage/
+
+# Environment variables
+.env
+
+# Logs
+*.log

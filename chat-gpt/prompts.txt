@@ -23,3 +23,5 @@ modify source code until it passes all UT, show the coverage percent
 
 update the package json for new dependencies and script commands
 
+can you write .gitignore for this project
+

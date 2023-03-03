@@ -15,3 +15,5 @@ passowrd from GAMIO_GREYTHR_PASS
 create a readme markdown file for all instructions telling to save env in shell permanently, and how to execute the project etc.
 I want whole readme file in one code block with markdown syntax
 
+create a package.json file for this
+

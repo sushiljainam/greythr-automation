@@ -113,3 +113,31 @@ npm test
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+
+Sure, here's a `package.json` file for the project:
+
+```json
+{
+  "name": "gamio-greythr-automation",
+  "version": "1.0.0",
+  "description": "Automated sign in/out for the Gamio Greythr HR portal using Puppeteer",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no tests specified\" && exit 1"
+  },
+  "keywords": [
+    "gamio",
+    "greythr",
+    "automation",
+    "puppeteer"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "puppeteer": "^13.1.0"
+  }
+}
+```
+

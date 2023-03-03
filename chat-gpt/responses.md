@@ -141,3 +141,41 @@ Sure, here's a `package.json` file for the project:
 }
 ```
 
+
+Sure, here's an example of a unit test using Jest to test the signIn and signOut functions of the gamioGreythrAutomation module:
+
+```javascript
+const gamioGreythrAutomation = require('./gamioGreythrAutomation');
+
+describe('gamioGreythrAutomation', () => {
+  let browser, page;
+
+  beforeAll(async () => {
+    browser = await gamioGreythrAutomation.launchBrowser();
+    page = await gamioGreythrAutomation.openPage(browser);
+  });
+
+  afterAll(async () => {
+    await browser.close();
+  });
+
+  describe('signIn', () => {
+    it('should sign in successfully with valid credentials', async () => {
+      const result = await gamioGreythrAutomation.signIn(page, 'valid_username', 'valid_password');
+      expect(result).toBe(true);
+    });
+
+    it('should fail to sign in with invalid credentials', async () => {
+      const result = await gamioGreythrAutomation.signIn(page, 'invalid_username', 'invalid_password');
+      expect(result).toBe(false);
+    });
+  });
+
+  describe('signOut', () => {
+    it('should sign out successfully', async () => {
+      const result = await gamioGreythrAutomation.signOut(page);
+      expect(result).toBe(true);
+    });
+  });
+});
+```

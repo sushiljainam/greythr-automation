@@ -1,0 +1,25 @@
+{
+    "name": "gamio-greythr-automation",
+    "version": "1.0.0",
+    "description": "Automate signing in and out of gamio.greythr.com",
+    "main": "index.js",
+    "scripts": {
+      "test": "jest",
+      "start": "node index.js"
+    },
+    "keywords": [
+      "automation",
+      "greythr",
+      "gamio"
+    ],
+    "author": "Your Name",
+    "license": "MIT",
+    "dependencies": {
+      "dotenv": "^16.0.0",
+      "puppeteer": "^13.1.0"
+    },
+    "devDependencies": {
+      "jest": "^27.4.7"
+    }
+  }
+  

@@ -25,3 +25,5 @@ update the package json for new dependencies and script commands
 
 can you write .gitignore for this project
 
+what will be the file structure for this project?
+

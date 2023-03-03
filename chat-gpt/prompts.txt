@@ -27,3 +27,5 @@ can you write .gitignore for this project
 
 what will be the file structure for this project?
 
+what will be sample .env
+

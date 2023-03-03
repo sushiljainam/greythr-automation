@@ -46,8 +46,8 @@ const login = async (page: Page) => {
     console.log('await page.waitForNavigation(),')
     console.log('await Promise.all([')
 
-    await page.waitForSelector('#dashboardContainer')
-    console.log('await page.waitForSelector(\'#dashboardContainer\')')
+    await page.waitForSelector('gt-attendance-info')
+    console.log('await page.waitForSelector(\'gt-attendance-info\')')
 }
 
 const signOut = async (page: Page) => {
@@ -57,10 +57,28 @@ const signOut = async (page: Page) => {
     console.log('await page.click(\'#logoutLink\')')
     await page.waitForNavigation()
     console.log('await page.waitForNavigation()')
-};
+}
+
+const signIn = async (page: Page) => {
+    const pe = await page.$('gt-attendance-info')
+    console.log('await page.click(\'gt-attendance-info\')', pe)
+    const bts = await pe?.$$('gt-button')
+    console.log('await page.click(\'gt-attendance-info * button\')', bts?.length)
+    if (bts && bts.length > 0) {
+        const tc = await bts[0].getProperty('textContent')
+        console.log(tc)
+        const text = await (tc).jsonValue()
+        console.log('button text', text)
+        await bts?.[0].click()
+    }
+    // await page.click('#logoutLink')
+    // console.log('await page.click(\'#logoutLink\')')
+    // await page.waitForNavigation()
+    // console.log('await page.waitForNavigation()')
+}
 
 (async () => {
-    const browser = await puppeteer.launch({ headless: false })
+    const browser = await puppeteer.launch({ headless: true })
     console.log('await puppeteer.launch({ headless: false })')
 
     try {
@@ -69,13 +87,15 @@ const signOut = async (page: Page) => {
         await login(page)
         console.log('await login(page)')
 
-        const shouldSignOut = process.argv[2] === 'signout'
+        const shouldSignOut = false // process.argv[2] === 'signout'
         if (shouldSignOut) {
             await signOut(page)
             console.log('await signOut(page)')
         } else {
-            await page.click('#signInButton')
-            console.log('await page.click(\'#signInButton\')')
+            await signIn(page)
+            console.log('await signIn(page)')
+            // await page.click('#signInButton')
+            // console.log('await page.click(\'#signInButton\')')
         }
     } finally {
         await browser.close()

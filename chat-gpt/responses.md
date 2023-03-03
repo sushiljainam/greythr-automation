@@ -1,9 +1,12 @@
-Here's an example headless browser script in Node.js using Puppeteer to achieve the tasks you described:
+Sure, here's an updated version of the headless browser script that takes a command line argument to determine whether to click the 'Sign In' or 'Sign Out' button:
 
 ```javascript
 const puppeteer = require('puppeteer');
 
 (async () => {
+  // Parse command line argument
+  const [,, action] = process.argv;
+
   // Launch browser and create a new page
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
@@ -21,17 +24,31 @@ const puppeteer = require('puppeteer');
   // Wait for the dashboard to load completely
   await page.waitForNavigation({ waitUntil: 'networkidle0' });
 
-  // Click on 'Sign In' button
-  await page.click('#signinbutton');
+  // Click on either 'Sign In' or 'Sign Out' button based on command line argument
+  const buttonSelector = action === 'signin' ? '#signinbutton' : '#signoutbutton';
+  await page.click(buttonSelector);
 
-  // Wait for the sign in process to complete
+  // Wait for the sign in/out process to complete
   await page.waitForNavigation({ waitUntil: 'networkidle0' });
 
   // Close the browser
   await browser.close();
 })();
 
+
 ```
 
-Note that you'll need to replace `'your_username'` and `'your_password'` with your actual login credentials. You may also need to adjust the selectors used to locate the login and sign in buttons based on the structure of the page.
 
+To run this modified script with the 'signin' command line argument, you can use the following command:
+
+```
+node index.js signin
+```
+
+And to run it with the 'signout' command line argument, you can use:
+
+
+```
+node index.js signout
+```
+Note that you'll need to replace 'your_username' and 'your_password' with your actual login credentials, and make sure that the button selectors '#signinbutton' and '#signoutbutton' match the actual selectors used on the page for the 'Sign In' and 'Sign Out' buttons respectively.

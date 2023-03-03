@@ -3,3 +3,8 @@ and enter username and password
 and click 'Log in' button
 and then when dashboard gets loaded completely
 click on 'Sign In' button
+
+add a condition into this script based on cmd line input
+input can be 'signin' or 'signout'
+modify the 'click on sign in button' step according to this input
+

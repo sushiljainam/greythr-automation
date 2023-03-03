@@ -1,23 +1,36 @@
 import puppeteer from 'puppeteer'
 import dotenv from 'dotenv'
+import { toLower } from 'ramda'
 
 dotenv.config()
 
 const { GAMIO_GREYTHR_UNAME, GAMIO_GREYTHR_PASS } = process.env
+
+const clickButtonWithLabel = async (page: puppeteer.Page, label: string) => {
+    const buttons = await page.$$('button')
+    for (const button of buttons) {
+        const buttonText = await button.textContent()
+        if (toLower(buttonText) === toLower(label)) {
+            await button.click()
+            break
+        }
+    }
+    throw new Error(`buttton with label (${label}) not found`)
+}
 
 const login = async (page: puppeteer.Page) => {
     await page.goto('https://gamio.greythr.com/', { waitUntil: 'networkidle0' })
 
     const usernameSelector = 'input[name="username"]'
     const passwordSelector = 'input[name="password"]'
-    const loginButtonSelector = '#loginBtn'
+    const loginButtonLabel = 'Log in'
 
     await page.type(usernameSelector, GAMIO_GREYTHR_UNAME || '')
     await page.type(passwordSelector, GAMIO_GREYTHR_PASS || '')
 
     await Promise.all([
         page.waitForNavigation(),
-        page.click(loginButtonSelector),
+        clickButtonWithLabel(page, loginButtonLabel),
     ])
 
     await page.waitForSelector('#dashboardContainer')

@@ -47,7 +47,7 @@ const login = async (page: Page) => {
     // console.debug('await page.waitForSelector(\'gt-attendance-info\')')
 }
 
-const signIn = async (page: Page, allowedBtnLabels: string[]) => {
+const clickIf = async (page: Page, allowedBtnLabels: string[]) => {
     const pe = await page.$('gt-attendance-info')
     if (pe) {
         // await exploreChildren(page, pe)
@@ -92,11 +92,11 @@ const m = (mm: string): string => {
         const actionMode = process.argv[2]
         console.debug(`Expected to click on ${m(actionMode)}`)
         if (actionMode === 'out') {
-            await signIn(page, ['signout'])
+            await clickIf(page, ['signout'])
         } else if (actionMode === 'in') {
-            await signIn(page, ['signin'])
+            await clickIf(page, ['signin'])
         } else if (actionMode === 'toggle') {
-            await signIn(page, ['signin', 'signout'])
+            await clickIf(page, ['signin', 'signout'])
         } else {
             console.error('action not defined')
         }

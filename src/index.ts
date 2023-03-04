@@ -59,19 +59,7 @@ const signOut = async (page: Page) => {
     console.log('await page.waitForNavigation()')
 }
 
-const exploreChildren = async function (page: Page, el: ElementHandle<Element>) {
-    const chs = await el.$$('pierce/button')
-    for (const ch of chs) {
-        console.log(await page.evaluate(elm => elm.tagName, el), '>', await page.evaluate(elm => elm.tagName, ch))
-        console.log(await page.evaluate(elm => elm.tagName, el), '>', await page.evaluate(elm => elm.textContent, ch))
-        if (includes('button', toLower(await page.evaluate(elm => elm.tagName, ch)))) {
-            await exploreChildren(page, ch)
-        }
-        // console.log(await el.getProperty('tagName'), '>', await ch.getProperty('tagName'))
-    }
-}
-
-const signIn = async (page: Page) => {
+const signIn = async (page: Page, allowedBtnLabels: string[]) => {
     const pe = await page.$('gt-attendance-info')
     console.log('await page.click(\'gt-attendance-info\')', pe)
     if (pe) {
@@ -79,13 +67,14 @@ const signIn = async (page: Page) => {
         const bts = await pe.$$('pierce/button')
         console.log('await page.click(\'gt-attendance-info * button\')', bts.length)
         for (const bt of bts) {
-            const btLabel = replace(/[ ]/g, '', trim(toLower(await page.evaluate(elm => elm.textContent, bt) || '')))
+            const btOrigLbl = await page.evaluate(elm => elm.textContent, bt) || ''
+            const btLabel = replace(/[ ]/g, '', trim(toLower(btOrigLbl)))
             console.log('btLabel', btLabel)
-            if (btLabel === 'signin') {
+            if (includes(btLabel, allowedBtnLabels)) {
                 await bts?.[0].click()
-                console.log('signin done')
+                console.log(`Clicked on [${btOrigLbl}]`)
             } else {
-                console.log('Skipping click')
+                console.log(`NOT clicked on [${btOrigLbl}]`)
             }
         }
     } else {
@@ -105,17 +94,20 @@ const signIn = async (page: Page) => {
         const page = await browser.newPage()
         console.log('await browser.newPage()')
         await login(page)
-        console.log('await login(page)')
+        console.log('await login(page)', process.argv[2])
 
-        const shouldSignOut = false // process.argv[2] === 'signout'
-        if (shouldSignOut) {
-            await signOut(page)
+        const actionMode = process.argv[2]
+        if (actionMode === 'out') {
+            await signIn(page, ['signout'])
             console.log('await signOut(page)')
-        } else {
-            await signIn(page)
+        } else if (actionMode === 'in') {
+            await signIn(page, ['signin'])
             console.log('await signIn(page)')
-            // await page.click('#signInButton')
-            // console.log('await page.click(\'#signInButton\')')
+        } else if (actionMode === 'toggle') {
+            await signIn(page, ['signin', 'signout'])
+            console.log('await signIn(page)2')
+        } else {
+            console.log('action not defined')
         }
     } finally {
         await browser.close()
